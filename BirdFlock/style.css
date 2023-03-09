@@ -1,0 +1,36 @@
+body {
+  background-color: black;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+    background-repeat: no-repeat;
+  background-size: cover;
+}
+/*alternate background image css*/
+/*body {
+  background-color: #000;
+  background-image: url("birdSky.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}*/
+
+
+canvas {
+  width: 1530px;
+  height: 650px;
+ /* display: block;*/
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.bird {
+  position: absolute;
+  background-color: color;
+  border-radius: 50%;
+  width: 2px;
+  height: 2px;
+  pointer-events: none;
+}

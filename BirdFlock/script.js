@@ -1,7 +1,8 @@
+
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
-const numBirds = 800;
+const numBirds = 2000;
 const birds = [];
 
 // Create initial birds
@@ -9,7 +10,8 @@ for (let i = 0; i < numBirds; i++) {
   const bird = {
     x: Math.random() * canvas.width,
     y: Math.random() * canvas.height,
-    angle: Math.random() * Math.PI * 2.5,
+    z: Math.random() * 1000 - 500, // Add a third dimension to each bird's movement
+    angle: Math.random() * Math.PI * 2,
   };
   birds.push(bird);
 }
@@ -33,7 +35,8 @@ function update() {
         const otherBird = birds[j];
         const dx = otherBird.x - bird.x;
         const dy = otherBird.y - bird.y;
-        const distance = Math.sqrt(dx ** 2.25 + dy ** 2.25);
+        const dz = otherBird.z - bird.z; // Add the third dimension to the distance calculation
+        const distance = Math.sqrt(dx ** 2 + dy ** 2 + dz ** 2); // Add the third dimension to the distance calculation
         if (distance < 2) {
           avgAngle += otherBird.angle;
           numNeighbors++;
@@ -48,6 +51,7 @@ function update() {
     // Move the bird in the new direction
     bird.x += Math.cos(bird.angle);
     bird.y += Math.sin(bird.angle);
+    bird.z += Math.sin(bird.angle); // Add the third dimension to the bird's movement
 
     // Wrap the bird around the screen if it goes off-screen
     if (bird.x < 0) {
@@ -65,35 +69,11 @@ function update() {
     drawBird(bird);
   }
 }
-/*
-function drawBird(bird) {
-  ctx.beginPath();
-  ctx.arc(bird.x, bird.y, 5, 0, Math.PI * 2);
-  ctx.fillStyle = "black";
-  ctx.fill();
-  ctx.closePath();
-}*/
-/*alternate bird sizing  */ 
-/*function drawBird(bird) {
-  const size = 2; // size of the bird in pixels
-  ctx.beginPath();
-  ctx.arc(bird.x, bird.y, 2, 0, Math.PI * 2);
-  ctx.fillStyle = "black";
-  ctx.fill();
-  ctx.closePath();
-}*/
-/*This function calculates the color of the bird based on its angle using the HSL color model.
-
-HSL stands for Hue, Saturation, and Lightness. Hue is a value between 0 and 360, which represents the color on the color wheel. Saturation is a value between 0% and 100%, which represents the intensity of the color. Lightness is a value between 0% and 100%, which represents how bright or dark the color is.
-
-In this code, the hue is determined by the bird's angle, which is multiplied by 180 and divided by PI to convert it from radians to degrees. The saturation and lightness are set to 50%, which means that the color will be a medium intensity and brightness. The resulting HSL color value is then used to fill the bird's shape on the canvas.
-
-So, as the bird changes its angle, the color of the bird will change as well, creating a subtle color shift effect.*/
 let count = 1;
 let increment = true;
 
 setInterval(() => {
-  console.log(count);
+ /* console.log(count);*/
 
   if (count === 360) {
     increment = false;
@@ -108,17 +88,20 @@ setInterval(() => {
   }
 }, 100);
 
-
 function drawBird(bird) {
-  /* continuous iteration 1-360 to change hsl balance using "count" variable*/
-
   const size = 2; // size of the bird in pixels
+  const zScale = 0.1; // Scale factor for the third dimension of movement
   const color = `hsl(${bird.angle * count / Math.PI}, 100%, 50%)`; // color of the bird based on its angle
+  const z = (bird.z * zScale) + (canvas.height / 2); // Scale the third dimension of movement and center it on the canvas
   ctx.beginPath();
-  ctx.arc(bird.x, bird.y, size, 0, Math.PI * 2);
+  ctx.arc(bird.x, bird.y, size - (z * 0.002), 0, Math.PI * 2); // Adjust the size of the bird based on its depth
   ctx.fillStyle = color;
   ctx.fill();
-  ctx.closePath();
 }
-
-
+function countIterations() {
+  let count = 0;
+  for (let i = 0; i < 1000000; i++) {
+    count++;
+  }
+  console.log("Number of iterations: " + update);
+}
